@@ -1,6 +1,6 @@
 {
   "name": "@feiye/pinyin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "汉子拼音转换",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
