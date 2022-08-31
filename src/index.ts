@@ -22,7 +22,7 @@ export function pinyinObj(str: string) {
 
     const c = str.charCodeAt(i);
     const isNum = c >= 48 && c <= 57; // 48-57[0-9]
-    const isAlp = c >= 97 && c <= 122; // 97-122[a-z]
+    const isAlp = (c >= 65 && c <= 90) || c >= 97 && c <= 122; // 65-90[A-Z] 97-122[a-z]
     if (isNum || isAlp) {
       if (isNum) {
         number += str[i];
@@ -105,4 +105,4 @@ export function pinyinKeywords(str: string) {
   return Array.from(out);
 }
 
-// console.log(pinyinKeywords("中华人民共和国abcde0123，hello电梯 维修工，从事维修20年h3c world"))
+// console.log(pinyinKeywords("中华人民共和国abcde0123，hello电梯 维修工，从事T22维修20年h3c world"))
