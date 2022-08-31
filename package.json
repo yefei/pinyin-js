@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "汉子拼音转换",
   "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "author": "Yefei",
   "license": "MIT",
   "devDependencies": {
