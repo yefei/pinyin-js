@@ -32,4 +32,14 @@ describe('Model', function() {
       'world',
     ]);
   });
+
+  it('pinyinKeywords opt', async function() {
+    const res = pinyinKeywords("中华人民 china abcd1234", { limit: 10, wordnumber: false });
+    assert.deepEqual(res, [
+      'zhonghua',
+      'huaren',
+      'renmin',
+      'china',
+    ]);
+  });
 });

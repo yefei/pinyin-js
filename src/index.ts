@@ -122,7 +122,7 @@ export function pinyinObj(str: string, opt?: Option) {
       type,
     });
 
-    if (opt.limit && opt.limit >= pinyin.length) {
+    if (opt.limit && pinyin.length >= opt.limit) {
       break;
     }
   }
@@ -165,7 +165,7 @@ export function pinyinKeywords(str: string, opt?: Option) {
   for (let p = 0; p < res.length; p++) {
     const type = res[p].type;
     // 拼接前后拼音为词
-    if (type === 'pinyin' && res[p + 1].type === 'pinyin') {
+    if (type === 'pinyin' && res[p + 1]?.type === 'pinyin') {
       out.add(res[p].result + res[p+1].result);
     } else if (type === 'word' || type === 'number' || type === 'wordnumber') {
       out.add(res[p].result);
