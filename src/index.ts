@@ -161,7 +161,7 @@ export function pinyinInitial(str: string) {
  */
 export function pinyinKeywords(str: string, opt?: Option) {
   const res = pinyinObj(str, opt);
-  const out = new Set();
+  const out = new Set<string>();
   for (let p = 0; p < res.length; p++) {
     const type = res[p].type;
     // 拼接前后拼音为词
