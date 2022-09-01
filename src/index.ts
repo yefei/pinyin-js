@@ -159,8 +159,8 @@ export function pinyinInitial(str: string) {
  * @param str 
  * @returns 结果是去重的
  */
-export function pinyinKeywords(str: string) {
-  const res = pinyinObj(str);
+export function pinyinKeywords(str: string, opt?: Option) {
+  const res = pinyinObj(str, opt);
   const out = new Set();
   for (let p = 0; p < res.length; p++) {
     const type = res[p].type;
