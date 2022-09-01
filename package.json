@@ -1,10 +1,13 @@
 {
   "name": "@feiye/pinyin",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "汉子拼音转换",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "author": "Yefei",
+  "repository": {
+    "url": "https://github.com/yefei/pinyin-js"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/mocha": "^9.1.1",
