@@ -7,30 +7,78 @@ interface Result {
   type: Type;
 }
 
+interface Option {
+  /**
+   * 解析拼音
+   * @default true
+   */
+  pinyin?: boolean;
+
+  /**
+   * 解析单词
+   * @default true
+   */
+  word?: boolean;
+
+  /**
+   * 解析数字
+   * @default true
+   */
+  number?: boolean;
+
+  /**
+   * 解析单词数字的组合
+   * @default true
+   */
+  wordnumber?: boolean;
+
+  /**
+   * 保留其他字符
+   * @default true
+   */
+  other?: boolean;
+
+  /**
+   * 数量限制
+   * @default 0 无限制
+   */
+  limit?: number;
+}
+
 /**
  * 汉子转换为拼音对象
  */
-export function pinyinObj(str: string) {
+export function pinyinObj(str: string, opt?: Option) {
   if (!str) return [];
+  opt = Object.assign({
+    pinyin: true,
+    word: true,
+    number: true,
+    wordnumber: true,
+    other: true,
+  }, opt);
   const pinyin: Result[] = [];
-  let result: string;
+
   let word = '';
   let number = '';
   let wordnumber = '';
   for (let i = 0; i <= str.length; i++) {
+    let result: string;
     let type: Type = 'other';
 
     const c = str.charCodeAt(i);
     const isNum = c >= 48 && c <= 57; // 48-57[0-9]
     const isAlp = (c >= 65 && c <= 90) || c >= 97 && c <= 122; // 65-90[A-Z] 97-122[a-z]
     if (isNum || isAlp) {
-      if (isNum) {
+      if (opt.number && isNum) {
         number += str[i];
       }
-      else if (isAlp) {
+      else if (opt.word && isAlp) {
         word += str[i];
       }
-      wordnumber += str[i];
+      if (opt.wordnumber) {
+        wordnumber += str[i];
+      }
       continue;
     }
 
@@ -60,9 +108,11 @@ export function pinyinObj(str: string) {
     wordnumber = '';
 
     if (str[i] in data) {
-      result = data[str[i]];
-      type = 'pinyin';
-    } else if (!result) {
+      if (opt.pinyin) {
+        result = data[str[i]];
+        type = 'pinyin';
+      }
+    } else if (opt.other && !result) {
       result = str[i];
       type = 'other';
     }
@@ -72,7 +122,9 @@ export function pinyinObj(str: string) {
       type,
     });
 
-    result = '';
+    if (opt.limit && opt.limit >= pinyin.length) {
+      break;
+    }
   }
   return pinyin;
 }
@@ -82,8 +134,24 @@ export function pinyinObj(str: string) {
  * @param str 
  * @returns 
  */
-export function pinyin(str: string) {
-  return pinyinObj(str).filter(i => i.type !== 'other').map(i => i.result).join(' ');
+export function pinyin(str: string, opt?: Option) {
+  return pinyinObj(str, opt).filter(i => i.type !== 'other').map(i => i.result).join(' ');
+}
+
+/**
+ * 取得首字母
+ * 注意：如果参数为字符串也只会返回首字母
+ * @param str 字符
+ */
+export function pinyinInitial(str: string) {
+  const res = pinyinObj(str, {
+    other: false,
+    limit: 1,
+  });
+  if (res.length) {
+    return res[0].result[0].toUpperCase();
+  }
+  return null;
 }
 
 /**
@@ -95,10 +163,11 @@ export function pinyinKeywords(str: string) {
   const res = pinyinObj(str);
   const out = new Set();
   for (let p = 0; p < res.length; p++) {
-    // 拼接拼音为词
-    if (res[p].type === 'pinyin' && res[p + 1].type === 'pinyin') {
+    const type = res[p].type;
+    // 拼接前后拼音为词
+    if (type === 'pinyin' && res[p + 1].type === 'pinyin') {
       out.add(res[p].result + res[p+1].result);
-    } else if (res[p].type !== 'other' && res[p].type !== 'pinyin') {
+    } else if (type === 'word' || type === 'number' || type === 'wordnumber') {
       out.add(res[p].result);
     }
   }
