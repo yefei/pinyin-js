@@ -108,9 +108,11 @@ export function pinyinObj(str: string, opt?: Option) {
     wordnumber = '';
 
     if (str[i] in data) {
+      type = 'pinyin';
       if (opt.pinyin) {
         result = data[str[i]];
-        type = 'pinyin';
+      } else {
+        result = str[i];
       }
     } else if (opt.other && !result) {
       result = str[i];
@@ -155,7 +157,7 @@ export function pinyinInitial(str: string) {
 }
 
 /**
- * 字符提取拼音关键词
+ * 字符串提取拼音关键词
  * @param str 
  * @returns 结果是去重的
  */
@@ -174,4 +176,4 @@ export function pinyinKeywords(str: string, opt?: Option) {
   return Array.from(out);
 }
 
-// console.log(pinyinKeywords("中华人民共和国abcde0123，hello电梯 维修工，从事T22维修20年h3c world"))
+// console.log(pinyinKeywords("中华人民共和国abcde0123，hello电梯 维修工，从事T22维修20年h3c world", { pinyin: false }))
